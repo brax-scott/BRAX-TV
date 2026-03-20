@@ -2,129 +2,66 @@
 <html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BRAX TV | LIVE STREAM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRAX-STREAM V6 | NO BOXES</title>
     <style>
-        :root { --brax-red: #ff0000; --brax-gold: #ffd700; --bg: #000000; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
-
-        /* HEADER YA KISHUA */
-        header { 
-            background: rgba(20, 20, 20, 0.95); padding: 15px; text-align: center; 
-            border-bottom: 3px solid var(--brax-red); position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.2);
-        }
-        .logo { font-size: 28px; font-weight: 900; letter-spacing: 2px; color: white; }
-        .logo span { color: var(--brax-red); }
-
-        .container { padding: 15px; max-width: 500px; margin: auto; }
-        
-        .status { font-size: 11px; color: var(--brax-gold); text-align: center; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* MATCH CARD */
-        .match-card { 
-            background: #111; border-radius: 15px; padding: 20px; margin-bottom: 20px; 
-            border: 1px solid #222; position: relative; transition: 0.3s;
-        }
-        .match-card:active { transform: scale(0.98); background: #1a1a1a; }
-        
-        .live-label { position: absolute; top: 10px; right: 15px; background: var(--brax-red); color: white; padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
-        .teams-row { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; }
-        .team-name { width: 40%; text-align: center; font-size: 16px; font-weight: bold; }
-        .vs-circle { background: #222; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: var(--brax-gold); }
-
-        /* ONE CLICK BUTTON */
-        .watch-btn { 
-            width: 100%; background: var(--brax-red); color: white; border: none; 
-            padding: 15px; border-radius: 10px; font-weight: 900; font-size: 14px; 
-            cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
-        }
-
-        /* FULLSCREEN PLAYER OVERLAY */
-        #player-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #000; z-index: 5000; display: none; flex-direction: column; 
-        }
-        .close-player { padding: 15px; background: #222; color: white; text-align: center; font-weight: bold; border-bottom: 2px solid var(--brax-red); }
-        .iframe-container { flex-grow: 1; position: relative; }
-        iframe { width: 100%; height: 100%; border: none; }
-        
-        /* FOOTER */
-        footer { text-align: center; padding: 20px; font-size: 10px; color: #444; }
+        body { background: #000; color: #ffcc00; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; text-align: center; }
+        header { padding: 25px; border-bottom: 3px solid #ffcc00; font-size: 28px; font-weight: 900; letter-spacing: 2px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; padding: 20px; }
+        .card { background: #111; border-radius: 10px; overflow: hidden; border: 1px solid #333; transition: 0.4s; cursor: pointer; }
+        .card:hover { border-color: #ffcc00; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(255, 204, 0, 0.4); }
+        .card img { width: 100%; height: 220px; object-fit: cover; }
+        .card h3 { font-size: 13px; padding: 10px; color: white; margin: 0; }
+        .btn-play { background: #ffcc00; color: black; border: none; padding: 10px; width: 100%; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">BRAX<span>TV</span></div>
-    </header>
+<header>BRAX<span>-CINEMA</span></header>
 
-    <div class="container">
-        <div class="status">● Satellite Server Active | 4K Stream Enabled</div>
+<div class="grid" id="movieList">
+    <p>Inapakia Movie za Kishua... (Hakikisha MB zipo)</p>
+</div>
 
-        <div class="match-card">
-            <div class="live-label">LIVE</div>
-            <div style="font-size: 11px; color: #666; margin-bottom: 10px;">PREMIER LEAGUE • 65'</div>
-            <div class="teams-row">
-                <div class="team-name">MAN UTD</div>
-                <div class="vs-circle">VS</div>
-                <div class="team-name">LIVERPOOL</div>
-            </div>
-            <button class="watch-btn" onclick="openPlayer('https://www.youtube.com/embed/live_stream?channel=UC...')">WATCH LIVE (ONE CLICK)</button>
-        </div>
+<script>
+    // API ya Siri (TMDB) ya kuvuta picha halisi
+    const API_KEY = '8265b3d02a5443584856312686616b7f';
 
-        <div class="match-card">
-            <div class="live-label">LIVE</div>
-            <div style="font-size: 11px; color: #666; margin-bottom: 10px;">LALIGA • 22'</div>
-            <div class="teams-row">
-                <div class="team-name">BARCELONA</div>
-                <div class="vs-circle">VS</div>
-                <div class="team-name">REAL MADRID</div>
-            </div>
-            <button class="watch-btn" onclick="openPlayer('https://www.youtube.com/embed/live_stream?channel=UC...')">WATCH LIVE (ONE CLICK)</button>
-        </div>
+    async function startApp() {
+        try {
+            // Tunavuta Movie zinazotrend LEO
+            const res = await fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`);
+            const data = await res.json();
+            const container = document.getElementById('movieList');
+            container.innerHTML = '';
 
-        <div class="match-card">
-            <div class="live-label" style="background: #333; animation: none;">COMING SOON</div>
-            <div style="font-size: 11px; color: #666; margin-bottom: 10px;">NBPL • 21:00</div>
-            <div class="teams-row">
-                <div class="team-name">SIMBA SC</div>
-                <div class="vs-circle">VS</div>
-                <div class="team-name">YANG SC</div>
-            </div>
-            <button class="watch-btn" style="background: #333; cursor: not-allowed;">SET REMINDER</button>
-        </div>
-    </div>
+            data.results.forEach(m => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                // Hapa ndipo ujanja ulipo: Tunafungua "Window Mpya" ili GitHub isiback
+                // Server ya vidsrc.xyz ndio tishio kwa sasa
+                const streamLink = `https://vidsrc.xyz/embed/movie/${m.id}`;
 
-    <div id="player-overlay">
-        <div class="close-player" onclick="closePlayer()">[X] CLOSE BRAX TV PLAYER</div>
-        <div class="iframe-container">
-            <iframe id="live-iframe" allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <footer>
-        MADE BY BRAX | © 2026 BRAX TV NETWORKS
-    </footer>
-
-    <script>
-        function openPlayer(streamUrl) {
-            const overlay = document.getElementById('player-overlay');
-            const iframe = document.getElementById('live-iframe');
-            
-            // Hapa unabadilisha "streamUrl" kuwa link halisi ya mpira uliyoipata
-            iframe.src = streamUrl; 
-            overlay.style.display = 'flex';
+                card.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${m.poster_path}">
+                    <h3>${m.title}</h3>
+                    <button class="btn-play">WATCH NOW (HD)</button>
+                `;
+                
+                card.onclick = () => {
+                    // Hii inafungua tab mpya na kucheza movie papo hapo!
+                    window.open(streamLink, '_blank');
+                };
+                
+                container.appendChild(card);
+            });
+        } catch (e) {
+            document.getElementById('movieList').innerHTML = "Hitilafu! Refresh page.";
         }
+    }
 
-        function closePlayer() {
-            const overlay = document.getElementById('player-overlay');
-            const iframe = document.getElementById('live-iframe');
-            iframe.src = ""; // Stop the stream when closed
-            overlay.style.display = 'none';
-        }
-    </script>
+    startApp();
+</script>
 </body>
 </html>
