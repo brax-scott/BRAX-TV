@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BRAX TV | LIVE STREAM</title>
+    <style>
+        :root { --brax-red: #ff0000; --brax-gold: #ffd700; --bg: #000000; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+
+        /* HEADER YA KISHUA */
+        header { 
+            background: rgba(20, 20, 20, 0.95); padding: 15px; text-align: center; 
+            border-bottom: 3px solid var(--brax-red); position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.2);
+        }
+        .logo { font-size: 28px; font-weight: 900; letter-spacing: 2px; color: white; }
+        .logo span { color: var(--brax-red); }
+
+        .container { padding: 15px; max-width: 500px; margin: auto; }
+        
+        .status { font-size: 11px; color: var(--brax-gold); text-align: center; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* MATCH CARD */
+        .match-card { 
+            background: #111; border-radius: 15px; padding: 20px; margin-bottom: 20px; 
+            border: 1px solid #222; position: relative; transition: 0.3s;
+        }
+        .match-card:active { transform: scale(0.98); background: #1a1a1a; }
+        
+        .live-label { position: absolute; top: 10px; right: 15px; background: var(--brax-red); color: white; padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        .teams-row { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; }
+        .team-name { width: 40%; text-align: center; font-size: 16px; font-weight: bold; }
+        .vs-circle { background: #222; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: var(--brax-gold); }
+
+        /* ONE CLICK BUTTON */
+        .watch-btn { 
+            width: 100%; background: var(--brax-red); color: white; border: none; 
+            padding: 15px; border-radius: 10px; font-weight: 900; font-size: 14px; 
+            cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+        }
+
+        /* FULLSCREEN PLAYER OVERLAY */
+        #player-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #000; z-index: 5000; display: none; flex-direction: column; 
+        }
+        .close-player { padding: 15px; background: #222; color: white; text-align: center; font-weight: bold; border-bottom: 2px solid var(--brax-red); }
+        .iframe-container { flex-grow: 1; position: relative; }
+        iframe { width: 100%; height: 100%; border: none; }
+        
+        /* FOOTER */
+        footer { text-align: center; padding: 20px; font-size: 10px; color: #444; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">BRAX<span>TV</span></div>
+    </header>
+
+    <div class="container">
+        <div class="status">● Satellite Server Active | 4K Stream Enabled</div>
+
+        <div class="match-card">
+            <div class="live-label">LIVE</div>
+            <div style="font-size: 11px; color: #666; margin-bottom: 10px;">PREMIER LEAGUE • 65'</div>
+            <div class="teams-row">
+                <div class="team-name">MAN UTD</div>
+                <div class="vs-circle">VS</div>
+                <div class="team-name">LIVERPOOL</div>
+            </div>
+            <button class="watch-btn" onclick="openPlayer('https://www.youtube.com/embed/live_stream?channel=UC...')">WATCH LIVE (ONE CLICK)</button>
+        </div>
+
+        <div class="match-card">
+            <div class="live-label">LIVE</div>
+            <div style="font-size: 11px; color: #666; margin-bottom: 10px;">LALIGA • 22'</div>
+            <div class="teams-row">
+                <div class="team-name">BARCELONA</div>
+                <div class="vs-circle">VS</div>
+                <div class="team-name">REAL MADRID</div>
+            </div>
+            <button class="watch-btn" onclick="openPlayer('https://www.youtube.com/embed/live_stream?channel=UC...')">WATCH LIVE (ONE CLICK)</button>
+        </div>
+
+        <div class="match-card">
+            <div class="live-label" style="background: #333; animation: none;">COMING SOON</div>
+            <div style="font-size: 11px; color: #666; margin-bottom: 10px;">NBPL • 21:00</div>
+            <div class="teams-row">
+                <div class="team-name">SIMBA SC</div>
+                <div class="vs-circle">VS</div>
+                <div class="team-name">YANG SC</div>
+            </div>
+            <button class="watch-btn" style="background: #333; cursor: not-allowed;">SET REMINDER</button>
+        </div>
+    </div>
+
+    <div id="player-overlay">
+        <div class="close-player" onclick="closePlayer()">[X] CLOSE BRAX TV PLAYER</div>
+        <div class="iframe-container">
+            <iframe id="live-iframe" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <footer>
+        MADE BY BRAX | © 2026 BRAX TV NETWORKS
+    </footer>
+
+    <script>
+        function openPlayer(streamUrl) {
+            const overlay = document.getElementById('player-overlay');
+            const iframe = document.getElementById('live-iframe');
+            
+            // Hapa unabadilisha "streamUrl" kuwa link halisi ya mpira uliyoipata
+            iframe.src = streamUrl; 
+            overlay.style.display = 'flex';
+        }
+
+        function closePlayer() {
+            const overlay = document.getElementById('player-overlay');
+            const iframe = document.getElementById('live-iframe');
+            iframe.src = ""; // Stop the stream when closed
+            overlay.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
